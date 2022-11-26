@@ -1,0 +1,153 @@
+/*****************************************************/
+/* Version 1. Not the best use of memory.            */
+/*****************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+struct data {
+   char brand[20];
+   float engine;
+   int miles;
+   char color[20];
+} temp, *autos;
+
+/*****************************************************/
+/* See how big the file is.                          */
+/*****************************************************/
+int scan(void) {
+int size = 0;
+char s_temp[100];
+int  i_temp;
+float f_temp;
+FILE *data;
+   data = fopen("./hw3.data", "r");
+   while (1) {
+      fscanf(data, "%s %f %d %s", s_temp, &f_temp, &i_temp, s_temp);
+      if (feof(data)) break;
+      size++;
+   }
+   return size;
+}
+
+/*****************************************************/
+/* See how big the file is.                          */
+/*****************************************************/
+int load(int size) {
+int i;
+FILE *data;
+   data = fopen("./hw3.data", "r");
+   for (i = 0; i < size; i++) {
+      fscanf(data, "%s %f %d %s", autos[i].brand, &autos[i].engine, &autos[i].miles, autos[i].color);
+   }
+   return size;
+}
+
+/*****************************************************/
+/* Sort by float.                                    */
+/*****************************************************/
+void sortf(int size) {
+int i, swapped;
+   do {               
+      swapped = 0; 
+      for (i = 0; i < size-1; i++) {
+          if (autos[i].engine > autos[i+1].engine) {
+             temp       = autos[i];               
+             autos[i]   = autos[i+1];
+             autos[i+1] = temp;
+             swapped = 1; 
+          }                 
+      }         
+    } while (swapped);
+}
+
+/*****************************************************/
+/* Sort by integer.       .                          */
+/*****************************************************/
+void sorti(int size) {
+int i, swapped;
+   do {               
+      swapped = 0; 
+      for (i = 0; i < size-1; i++) {
+          if (autos[i].miles > autos[i+1].miles) {
+             temp       = autos[i];               
+             autos[i]   = autos[i+1];
+             autos[i+1] = temp;
+             swapped = 1; 
+          }                 
+      }         
+   } while (swapped);
+}
+
+/*****************************************************/
+/* Print high to low.                                */
+/*****************************************************/
+void printhl(int size) {
+int i;
+   for (i = size-1; i >= 0; i--) {
+       printf("%s %f %d %s\n", autos[i].brand, autos[i].engine, autos[i].miles, autos[i].color);
+   }
+}
+
+/*****************************************************/
+/* Print low to high.                                */
+/*****************************************************/
+void printlh(int size) {
+int i;
+   for (i = 0; i < size; i++) {
+       printf("%s %f %d %s\n", autos[i].brand, autos[i].engine, autos[i].miles, autos[i].color);
+   }
+}
+
+/*****************************************************/
+/* Main                                              */
+/*****************************************************/
+int main(void) {
+int size;
+char option;
+    while (1) {
+       printf("MENU\n");
+       printf("1] Sort by float & print hi to lo.\n");
+       printf("2] Sort by float & print lo to hi.\n");
+       printf("3] Sort by int   & print hi to lo.\n");
+       printf("4] Sort by int   & print lo to hi.\n");
+       printf("5] Exit.\n");
+       scanf("%c", &option);
+       switch (option) {
+          case '1': 
+            size = scan();
+            autos = calloc(size, sizeof(temp));
+            load(size);
+            sortf(size);
+            printhl(size);
+            free(autos);												
+            break;
+          case '2': 
+            size = scan();
+            autos = calloc(size, sizeof(temp));
+            load(size);
+            sortf(size);
+            printlh(size);
+            free(autos);												
+            break;
+          case '3': 
+            size = scan();
+            autos = calloc(size, sizeof(temp));
+            load(size);
+            sorti(size);
+            printhl(size);
+            free(autos);												
+            break;
+          case '4': 
+            size = scan();
+            autos = calloc(size, sizeof(temp));
+            load(size);
+            sorti(size);
+            printlh(size);
+            free(autos);												
+            break;
+          case '5':
+             exit(1); 
+       }
+    }
+}
