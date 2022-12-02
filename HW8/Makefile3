@@ -1,0 +1,26 @@
+#Adam Roy
+#CSCI 330
+#HW8 Makefile3
+
+all: Makefile3
+
+Makefile3: hw8-adamroy-3.o hw8-lib-adamroy.so
+	gcc hw8-adamroy-3.c -I. -ldl -o hw8
+
+hw8-lib-adamroy.so: hw8-scan.o hw8-load.o hw8-search.o hw8-free.o
+	gcc -shared hw8-scan.o hw8-load.o hw8-search.o hw8-free.o -o hw8-lib-adamroy.so
+
+hw8-scan.o: hw8-scan.c hw8-scan.h
+	gcc -fpic -c hw8-scan.c
+
+hw8-load.o: hw8-load.c hw8-load.h
+	gcc -fpic -c hw8-load.c
+
+hw8-search.o: hw8-search.c hw8-search.h
+	gcc -fpic -c hw8-search.c
+
+hw8-free.o: hw8-free.c hw8-free.h
+	gcc -fpic -c hw8-free.c
+
+clean: 
+	rm -f hw8 *.o *.so
